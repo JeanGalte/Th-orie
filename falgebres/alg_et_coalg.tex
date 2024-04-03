@@ -45,7 +45,7 @@ Une catégorie sert à modéliser une \textit{structure}. C'est extrêmement lar
 \end{itemize}
 
 Enfin, dernières notions dont nous aurons besoin : un objet initial $I$ d'une catégorie $C$
-est un objet tel que $ \forall X \in Ob(C)$, il existe un unique morphisme de $I$ dans $X$. Un objet final $F$ d'une catégorie $C$ est un objet tel que $ \forall X \in Ob(C)$, il existe un unique morphisme de $ X$ dans $F$.
+est un objet tel que pour tout objet $X$, il existe un unique morphisme de $I$ dans $X$. Un objet final $F$ d'une catégorie $C$ est un objet tel que pour tout objet $X$, il existe un unique morphisme de $ X$ dans $F$.
 
 \subsubsection{Exemples de catégories}
 
@@ -67,7 +67,7 @@ Un foncteur $F$ d'une catégorie $C$ vers une catégorie $D$ est une transformat
 
 \subsection{Produits, coproduits}
 
-Définir formellement ici la notion de produit et coproduit ne serait pas forcément pertinent. Comme dit plus tôt, je pense que la meilleure façon d'apprendre la théorie des catégories est de se confronter à des exemples, et d'aller chercher la partie théorique nécessaire à leur compréhension. Une définition formelle et abordable le \cite{MacLane} (page 62), une ressource régulièrement recommandée pour s'introduire à la théorie des catégories. Mais pour lire ce document, il suffit de pouvoir se représenter un coproduit (noté $+$) comme une extension l'union disjointe entre deux objets. Notons alors que $A+B$ est une forme d'union disjointe, donc on peut y différencier un objet de $A$ d'un objet de $B$ : ça nous permet entre autres de définir des morphismes avec un "pattern matching", qui se comprortent différemment sur la première et la seconde composante de du coproduit. Par exemple, on peut définir le morphisme de $\N + \Z$ qui à un entier naturel associe son successeur, et à un entier associe son prédécesseur : 
+Définir formellement ici la notion de produit et coproduit ne serait pas forcément pertinent. Comme dit plus tôt, je pense que la meilleure façon d'apprendre la théorie des catégories est de se confronter à des exemples, et d'aller chercher la partie théorique nécessaire à leur compréhension. Une définition formelle et abordable se trouve dans le \cite{MacLane} (page 62), une ressource régulièrement recommandée pour s'introduire à la théorie des catégories. Mais pour lire ce document, il suffit de pouvoir se représenter un coproduit (noté $+$) comme une extension l'union disjointe entre deux objets. Notons alors que $A+B$ est une forme d'union disjointe, donc on peut y différencier un objet de $A$ d'un objet de $B$ : ça nous permet entre autres de définir des morphismes avec un "pattern matching", qui se comprortent différemment sur la première et la seconde composante de du coproduit. Par exemple, on peut définir le morphisme de $\N + \Z$ qui à un entier naturel associe son successeur, et à un entier associe son prédécesseur : 
 \begin{align*}
      \alpha : \N + \Z & \rightarrow \N + \Z \\ 
      n & \mapsto inl(n+1) \\ 
@@ -372,10 +372,56 @@ Une $F$-coalgèbre est l'objet \textit{dual} d'une $F$-algèbre. Cette notion ab
 \end{tikzcd}    
 \end{center}
 
-Pour un endofoncteur $F$ défini sur une catégorie $C$, une $F$-coalgèbre est donc la donnée d'un support $A$ (élément de $C$) et d'un morphisme $A \rightarrow FA$. Cette définition peut parâitre troublante une fois qu'on a pleinement compris celle d'une $F$-algèbre : la $F$ algèbre nous permettait d'exprimer une construction, via un morphisme. La coalgèbre, au contraire, permet d'exprimer la "destruction". C'est un formalisme particulièrement approprié  pour décrire des structures infinies. On se limitera à l'étude de ces modélisations.
+Pour un endofoncteur $F$ défini sur une catégorie $C$, une $F$-coalgèbre est donc la donnée d'un support $A$ (élément de $C$) et d'un morphisme $A \rightarrow FA$. Cette définition peut parâitre troublante une fois qu'on a pleinement compris celle d'une $F$-algèbre : la $F$ algèbre nous permettait d'exprimer une construction, via un morphisme. La coalgèbre, au contraire, permet d'exprimer la "destruction". C'est un formalisme particulièrement approprié  pour décrire des structures infinies, ou des processus qui \textit{pourraient} ne pas s'arrêter.
+
+\subsection{F-algèbres initiales}
+
+Une $F$-algèbre initiale induit une $F$-coalgèbre. En effet, soit $C$ une catégorie, $F$ un endofoncteur sur $C$, et $A, \alpha$ une $F$-algèbre initiale. Alors, pour toute $F$-algèbre supportée par $X$, il existe une unique flèche $ \alpha'$ de $A$ vers $X$. On pose $X = FA$, on a donc un unique morphisme : 
+\begin{align*}
+    \alpha' : A & \rightarrow FA 
+\end{align*}
+C'est à dire que $A, \alpha'$ constitue une $F$-coalgèbre. En général, $\alpha'$ est d'ailleurs relativement simple à expliciter : lorsqu'on montre que $A$ est support d'une $F$-algèbre initiale, on construit généralement l'unique morphsme pour un objet quelconque, il suffit de remplacer cet objet par $A$.
+Ce résultat a une interprétation moins formelle : l'initialité dans une $F$-algèbre est parfois liée à quelque chose qui \textit{pourrait} ne pas s'arrêter. On a par exemple vu plus haut que la construction de la récursion se décrit via l'initialité d'une $F$-algèbre. Or cette récursion est quelque chose qui ne s'arrête potentiellement pas : on veut pouvoir construire tous les termes d'une suite, par exemple. 
+
+\subsection{Un exemple algébrique : les groupes quotient}
+
+Un groupe quotient reste un groupe, on peut donc exprimer cette transformation par un endofoncteur de $Grp$ à condition que cette transformation soit \textit{fonctorielle}, c'est à dire qu'elle fasse commuter le diagramme suivant pour trois groupes $G_1,G_2,G_3$ et des morphismes $f$ et $g$ : 
+
+\begin{center}
+\begin{tikzcd}
+	{FG_1} &&&& {F G_3} \\
+	\\
+	&& {FG_2} \\
+	&& {G_2} \\
+	\\
+	{G_1} &&&& {G_3}
+	\arrow["f", from=6-1, to=4-3]
+	\arrow["F", from=6-1, to=1-1]
+	\arrow["{F f \circ g}", from=1-1, to=1-5]
+	\arrow["F", from=4-3, to=3-3]
+	\arrow["g"', from=4-3, to=6-5]
+	\arrow[no head, from=4-3, to=6-1]
+	\arrow["{f \circ g}", from=6-1, to=6-5]
+	\arrow["F"', from=6-5, to=1-5]
+	\arrow["{F f}"', from=1-1, to=3-3]
+	\arrow["Fg"', from=3-3, to=1-5]
+\end{tikzcd}
+\end{center}
+
+Bonne nouvelle : pour trois exemples, on a la fonctorialité. \\ 
+Le premier exemple : le quotient de $G$ par $G$. Le foncteur $F$ associé envoie alors un groupe $G$ sur le groupe $G/G$ isomorphe au groupe trivial, et tout morphisme sur le morphisme trivial. \\ 
+Deuxième exemple : le quotient de $G$ par $\{1_G\}$. Le foncteur $F$ associé envoie alors $G$ sur $G/\{ 1_G\}$ isomorphe à $G$ (foncteur identité), et tout morphisme sur lui-même. \\ 
+Troisième exemple un peu moins simple : le quotient de $G$ par $D(G)$ le sous groupe dérivé de $G$. Le foncteur envoie un objet $G$ sur $G/D(G)$, et le morphisme sur le morphisme associé, "abélianisé". \\ 
+Dans tous ces exemples, le quotient par un groupe induit une $F$-algèbre. Soit $F$ le "foncteur quotient", $G$ un groupe, alors $(G, \pi)$ est une $F$-algèbre  si $\pi$ et la projection canonique surjective. On a :  
+\begin{align*}
+    \pi : G & \rightarrow  FG\\
+          g & \mapsto \bar{g}
+\end{align*}
+
+Où $\bar{g}$ est la classe de $g$ suivant le groupe par lequel on quotiente. 
 
 \subsection{Types coinductifs}
-Les $F$-coalgèbres  modélisent le plus souvent un type coinductif. L'intuition d'un type coinductif est la suivante : au lieu de lire une BNF de façon "inductive", i.e avec des cas de base, des constructeurs, on l'interprète de façon coinductive : avec des destructeurs.  \\
+Les $F$-coalgèbres  modélisent  souvent un type coinductif. L'intuition d'un type coinductif est la suivante : au lieu de lire une BNF de façon "inductive", i.e avec des cas de base, des constructeurs, on l'interprète de façon coinductive : avec des destructeurs.  \\
 
 Pour modéliser le "destructeur" (prédecesseur) du type des entiers naturels, on peut poser : 
 \begin{align*}

@@ -10,7 +10,9 @@
 \usepackage{hyperref}
 \usepackage{circuitikz}
 \usepackage{listings}
+\usepackage{minted}
 \usepackage{tikz-cd}
+\usepackage[francais]{babel}
 \usepackage[style=authoryear]{biblatex}
 \addbibresource{algebres.bib} 
 
@@ -26,19 +28,20 @@
 \begin{document}
 
 \maketitle
+\newpage
 \tableofcontents
 \newpage
 
 \section{Introduction au langage catégorique}
 
-La théorie des catégories est un sujet extrêmement vaste et difficile à appréhender, si j'en crois mon expérience. Il existe de nombreux ouvrages qui permettent à un étudiant de s'y introduire, mais j'ai rencontré plus de succès en regardant seulement ce dont j'avais besoin au moment où j'en avais besoin. D'où la présence de cette partie : tout ce dont on a besoin pour lire ce document est expliqué ici
+La théorie des catégories est un sujet vaste et difficile à appréhender, si j'en crois mon expérience. Il existe de nombreux ouvrages qui permettent à un étudiant de s'y introduire, mais j'ai rencontré plus de succès en regardant seulement ce dont j'avais besoin au moment où j'en avais besoin. D'où la présence de cette partie : tout ce dont on a besoin pour lire ce document est expliqué ici.
 
 \subsection{Catégorie}
 
-Une catégorie sert à modéliser une \textit{structure}. C'est extrêmement large, c'est le but, d'où l'intérêt d'assimiler la définition et de se cantonner à l'étude d'exemples (de toute façon, la théorie des catégories sert principalement à modéliser, donc comprendre ces modélisations est le plus important). Une catégorie $C$ est la donnée de 5 éléments : 
+Une catégorie sert à modéliser une \textit{structure}. La notion est très large, c'est l'objectif, d'où l'intérêt d'assimiler la définition et de se cantonner à l'étude d'exemples (de toute façon, la théorie des catégories sert principalement à modéliser, donc comprendre ces modélisations est le plus important). Une catégorie $C$ est la donnée de 5 éléments : 
 \begin{itemize}
     \item Une classe d'objets $Ob(C)$. On a besoin de définir une classe afin d'éviter certains paradoxes ensemblistes classiques (paradoxe du barbier, par exemple), mais dans ce document on pourra autant utiliser un ensemble.
-    \item Une classe de morphismes (ou flèches) entre ces objets, appelée $mor(C)$ qui préservent la structure des objets.
+    \item Une classe de morphismes (ou flèches) entre ces objets, appelée $mor(C)$. Souvent, il s'agit d'applications qui préservent la structure des objets.
     \item Deux applications de $mor(C)$ dans $Ob(C)$ : la source et le but (qui permettent de donner la source et le but d'un morphisme). L'ensemble des morphismes d'un objet $A$ dans un objet $B$ est noté $Hom(A,B)$ 
     \item Une flèche identité pour tous les objets : $Hom(A,A)$ contient toujours l'identité.
     \item Une loi de composition pour les morphismes qui est associative et qui admet les identités pour neutre
@@ -50,7 +53,7 @@ est un objet tel que pour tout objet $X$, il existe un unique morphisme de $I$ d
 \subsubsection{Exemples de catégories}
 
 Les exemples de catégories sont très nombreux, c'est le but de cette théorie : pouvoir modéliser le plus de choses possibles. Voici cependant 3 exemples communs. \\  
-La catégorie des ensembles, $Set$. Les objets sont des ensembles, les morphismes des applications, l'identité d'un objet est l'application identité définie sur un ensemble. La loi de composition est la composition usuelle. Les singletons sont tous des objets terminaux de cette catégorie : quel que soit l'ensemble $E$ qu'on choisit, on peut définir une seule fonction de ce dernier dans un singleton (celle qui envoie $E$ entier sur le seul élément du singleton). La catégorie n'admet en revanche qu'un seul objet initial : l'ensemble vide.  
+La catégorie des ensembles, $\mathbf{Set}$. Les objets sont des ensembles, les morphismes des applications, l'identité d'un objet est l'application identité définie sur un ensemble. La loi de composition est la composition usuelle. Les singletons sont tous des objets terminaux de cette catégorie : quel que soit l'ensemble $E$ qu'on choisit, on peut définir une seule fonction de ce dernier dans un singleton (celle qui envoie $E$ entier sur le seul élément du singleton). La catégorie n'admet en revanche qu'un seul objet initial : l'ensemble vide. Tout au long du document, on nommera $1$ le singleton $\{ * \} $ dans la catégorie des ensembles. 
 \\ 
 La catégorie des groupes, notée $Grp$. Les objets sont les groupes, les flèches les morphismes de groupe, l'identité d'un objet est le morphisme identité, la composition est celle des morphismes (attention, syntaxtiquement ce n'est pas celle des applications, puisqu'une composition de morphisme est un morphisme, et non pas une simple application). Cette catégorie admet un seul objet final : le groupe trivial à un élément, pour n'importe quel groupe $G$, le morphisme trivial est l'unique flèche de $G$ dans $\{ 1 \}$. La catégorie admet également un objet initial en la personne de $\{ 1 \}$ : pour tout groupe $G$, on peut définir un unique morphisme (le morphisme trivial) qui envoie le groupe trivial sur $G$.
 \\ 
@@ -58,22 +61,52 @@ La catégorie des groupes, notée $Grp$. Les objets sont les groupes, les flèch
 
 \subsection{Foncteurs}
 
-Un foncteur $F$ d'une catégorie $C$ vers une catégorie $D$ est une transformation des objets et des morphismes de $C$ en objets et morphismes de $D$, en envoyant les identités de $C$ sur celles de $D$, et en respectant la composition : pour tout couple $\alpha, \beta$ de morphismes de $C$, ($\alpha : X \rightarrow Y$, $\beta : Y \rightarrow Z$), $F( \beta \circ \alpha) = F(\beta) \circ F(\alpha) : F(X) \rightarrow F(Z) $. Voici des exemples de foncteurs courants : 
+Un foncteur $F$ d'une catégorie $C$ vers une catégorie $D$ est constitué d'un objet $FA$ de $D$ pour tout objet $A$ de $C$, et d'un morphisme $Ff : FA \rightarrow FB$ pour tout morphisme $A \rightarrow B$ de $C$, en respectant la composition : pour tout couple $\alpha, \beta$ de morphismes de $C$, ($\alpha : X \rightarrow Y$, $\beta : Y \rightarrow Z$), $F( \beta \circ \alpha) = F(\beta) \circ F(\alpha) : F(X) \rightarrow F(Z) $. Les identités des objets doivent également être envoyés sur les identités de leurs images. 
+Le respect de la composition pour les foncteurs s'exprime par la commutativité du diagramme suivant pour $F : C_1 \rightarrow C_2 $, $A_1,A_2,A_3$ des objets de $C_1$ et $f \in Hom(A_1,A_2)$, $g \in Hom(A_2,A_3)$ : 
+
+\begin{center}
+\begin{tikzcd}
+	{FA_1} &&&& {F A_3} \\
+	\\
+	&& {FA_2} \\
+	&& {A_2} \\
+	\\
+	{A_1} &&&& {A_3}
+	\arrow["f", from=6-1, to=4-3]
+	\arrow["F", from=6-1, to=1-1]
+	\arrow["{F f \circ g}", from=1-1, to=1-5]
+	\arrow["F", from=4-3, to=3-3]
+	\arrow["g"', from=4-3, to=6-5]
+	\arrow[no head, from=4-3, to=6-1]
+	\arrow["{g \circ f}", from=6-1, to=6-5]
+	\arrow["F"', from=6-5, to=1-5]
+	\arrow["{F f}"', from=1-1, to=3-3]
+	\arrow["Fg"', from=3-3, to=1-5]
+\end{tikzcd}
+\end{center}
+
+Voici des exemples de foncteurs courants : 
 \begin{itemize}
-    \item Pour toute catégorie $C$, un foncteur identité de $C$ dans $C$ est défini. La composition des foncteurs se faisant "correctement", on peut définir catégorie de foncteurs de $C$ dans $D$ : les morphismes sont appelés des transformations naturelles. 
-        \item Le foncteur constant  envoie tous les objets de la catégorie de départ sur le même objet de la catégorie d'arrivée et qui envoie chaque flèche de la catégorie de départ sur l'identité de l'objet image. C'est l'objet terminal de la catégorie des foncteurs.
-    \item Les foncteurs d'oubli permettent d'"oublier" certaines propriétés des objets d'une catégorie. Par exemple, dans la catégorie des groupes, les objets sont des groupes donc des monoïdes munis d'un axiome d'inversibilité, et les morphismes sont (en particulier) des morphismes de monoïdes. Donc on peut "oublier" la propriété d'inverse, c'est le foncteur d'oubli de la catégorie $Grp$ dans $Mon$. On peut faire la même chose avec toute structure algébrique "strictement plus faible" qu'un groupe : on peut oublier toutes les propriétés d'un groupe de façon fonctonrielle, jusqu'à envoyer $Grp$ sur $Set$, en ne gardant que la structure d'ensemble (ensemble sous jacent du groupe), et d'application (contenue dans la structure de morphisme de groupes). 
+    \item Pour toute catégorie $C$, un foncteur identité de $C$ dans $C$ est défini : il envoie tout élément sur lui même, et tout morphisme sur lui même. 
+    \item Le foncteur constant  envoie tous les objets de la catégorie de départ sur le même objet de la catégorie d'arrivée et qui envoie chaque flèche de la catégorie de départ sur l'identité de l'objet image. C'est l'objet terminal de la catégorie des foncteurs.
+    \item Les foncteurs d'oubli "oublient" certaines propriétés des objets d'une catégorie. Par exemple, dans la catégorie des groupes, les objets sont des groupes donc des monoïdes munis d'un axiome d'inversibilité, et les morphismes sont (en particulier) des morphismes de monoïdes. Donc on peut "oublier" la propriété d'inverse, c'est le foncteur d'oubli de la catégorie $Grp$ dans $Mon$ qui envoie tout groupe sur son monoïde sous jacent, et tout morphisme de groupe sur lui même (si la compatibilité de l'inversion avait fait partie de la définition de morphisme, elle aurait été \textit{oubliée}, mais ce n'est qu'une propriété qui découle des axiomes du groupe. Donc la définition d'un morphisme de groupe est la même que celle d'un morphisme de monoïde). On peut faire la même chose avec toute structure algébrique "strictement plus faible" qu'un groupe : on peut oublier toutes les propriétés d'un groupe de façon fonctonrielle, jusqu'à envoyer $Grp$ sur $\mathbf{Set}$, en ne gardant que l'information d'ensemble (ensemble sous jacent du groupe), et d'application (contenue dans l'information du morphisme de groupes). 
 \end{itemize}
 
 \subsection{Produits, coproduits}
 
-Définir formellement ici la notion de produit et coproduit ne serait pas forcément pertinent. Comme dit plus tôt, je pense que la meilleure façon d'apprendre la théorie des catégories est de se confronter à des exemples, et d'aller chercher la partie théorique nécessaire à leur compréhension. Une définition formelle et abordable se trouve dans le \cite{MacLane} (page 62), une ressource régulièrement recommandée pour s'introduire à la théorie des catégories. Mais pour lire ce document, il suffit de pouvoir se représenter un coproduit (noté $+$) comme une extension l'union disjointe entre deux objets. Notons alors que $A+B$ est une forme d'union disjointe, donc on peut y différencier un objet de $A$ d'un objet de $B$ : ça nous permet entre autres de définir des morphismes avec un "pattern matching", qui se comprortent différemment sur la première et la seconde composante de du coproduit. Par exemple, on peut définir le morphisme de $\N + \Z$ qui à un entier naturel associe son successeur, et à un entier associe son prédécesseur : 
+Définir formellement ici la notion de produit et coproduit ne serait pas forcément pertinent. Comme dit plus tôt, je pense que la meilleure façon d'apprendre la théorie des catégories est de se confronter à des exemples, et d'aller chercher la partie théorique nécessaire à leur compréhension. Une définition formelle et abordable se trouve dans le \cite{MacLane} (page 62), une ressource régulièrement recommandée pour s'introduire à la théorie des catégories. Mais pour lire ce document, il suffit de savoir que sur la catégorie des ensembles $\mathbf{Set}$, le coproduit (noté $+$) est l'union disjointe entre deux ensembles. Notons alors que dans une union disjointe $A+B$ on peut différencier un élément de $A$ d'un élément de $B$ : ça nous permet entre autres de définir des application avec un "pattern matching", qui se comprortent différemment sur la première et la seconde composante de du coproduit. Par exemple, on peut définir le morphisme de $\N + \Z$ qui à un entier naturel associe son successeur, et à un entier associe son prédécesseur : 
+\begin{align*}
+     \alpha : \N + \Z & \rightarrow \Z \\ 
+     n & \mapsto n+1 \\ 
+     k & \mapsto k-1     
+\end{align*}
+La donnée d'un élément de $\Z$ et d'un ensemble $X$ nous donnent la donnée d'un élément de $\Z + X$, donc si on veut avoir pour codomaine un comproduit, on peut "injecter" l'élément d'un ensemble $A$ dans le coproduit $A+B$. Concrètement,  un élément $a \in A$ s'injecte dans $A+B$ comme $(0,a)$. Pour réaliser cette injection, on peut utiliser $inr$. L'équivalent pour l'injection à gauche est $inl$. Si on veut définir $\alpha$ comme un endomorphisme de $\N + \Z$, on peut donc le réécrire en utilisant ces injections :
 \begin{align*}
      \alpha : \N + \Z & \rightarrow \N + \Z \\ 
      n & \mapsto inl(n+1) \\ 
      k & \mapsto inr(k-1)     
 \end{align*}
-Où $inl$ et $inr$ désignent les injections droites et gauche : $n+1$ est un objet de $\N$, mais pour qu'il soit interprété comme un objet de $\N + \Z$ il faut l'y "injecter à gauche". Idem pour l'injection droite. Un coproduit, noté $\times$ peut être interprété comme un produit cartésien : ses éléments sont donc des couples.
+Dans $\mathbf{Set}$ le coproduit, noté $\times$ est simplement el produit cartésien. 
 
 
 \section{F-algèbres}
@@ -91,124 +124,131 @@ Soit $C$ une catégorie, et $F :C \longrightarrow C$ un endofoncteur. Une $F$-al
  
 \subsubsection{Exemples (et non exemples) algébriques}
  
-    Les $F$-algèbres fournissent une définition (un peu plus) constructive des structures algébriques usuelles. Par exemple, d'un point de vue catégorique, on pourrait dire qu'un monoïdes est simplement un objet de la catégorie monoïdes. Cette définition ne permet pas de regarder ce qu'il se passe \textit{à l'intérieur} d'un monoïde : par exemple, un monoïde est par définition doté d'un neutre, mais cette définition ne permet pas de l'expliciter (en fait, on doit définir un morphisme $1 \rightarrow M$ qui envoie $*$ sur le neutre, mais cette définition n'est pas "canonique". On n'a pas un unique morphisme $1 \rightarrow M$ pour tous les monoïdes, donc décrire un monoïde simplement comme l'élément d'une catégorie ne permet pas d'"embarquer" son neutre explicite).  Rien n'explicite non plus la façon dont se comporte la loi du monoïde. Les monoïdes induisent une $F$-algèbre sur la catégorie des monoïdes. En effet, on pose 
+    Les $F$-algèbres fournissent une définition (un peu plus) constructive des structures algébriques usuelles. Par exemple, d'un point de vue catégorique, on pourrait dire qu'un monoïde est simplement un objet de la catégorie monoïdes. Cette définition ne permet pas d'embarquer (d'un point de vue catégoriel) ce qu'il se passe \textit{à l'intérieur} d'un monoïde : rien n'explicite la façon dont se comporte la loi du monoïde. Les monoïdes induisent une $F$-algèbre sur la catégorie des ensembles. En effet, soit $M$ un monoïde, et $ M_{Ens}$ son ensemble sous jacent.  
 \begin{align*}
-    F : M & \rightarrow M \\
-    M & \mapsto 1 + M \times M
+    F : \mathbf{Set} & \mathbf{Set} \\
+    X & \mapsto 1 + X \times X
 \end{align*}
 
-Et pour un monoïde donné $M$ de neutre $1_M$ et de loi $\cdot$, on peut donc définir notre $F$-algèbre : 
+Est bien un endofoncteur de $\mathbf{Set}$, et $M$ est pleinement défini par la $F$-algèbre ($M_{Ens}$, $\alpha$), où 
 \begin{align*}
-    f : F M & \rightarrow M \\
-     * & \mapsto 1_M \\ 
-     \langle x,y \rangle & \mapsto x \cdot y 
-\end{align*}
-permet d'expliciter notre loi, et notre neutre. Un monoïde induit donc une $F$-algèbre pour ce foncteur, mais l'inverse n'est pas vrai : on peut par exemple considérer 
+    \alpha : FM_{Ens} & \rightarrow M_{Ens} \\ 
+                * & \mapsto 1_M \\ 
+                \langle x, y \rangle & \mapsto xy
+\end{align*}    
+Un monoïde induit donc une $F$-algèbre pour ce foncteur, mais l'inverse n'est pas vrai : on peut par exemple considérer pour un ensemble $E$ qui contient un élément $1$ :
 \begin{align*}
-    g : F M & \rightarrow M \\
-     * & \mapsto 1_M \\ 
-     \langle x,y \rangle & \mapsto 1_M 
+    g : F E & \rightarrow M \\
+     * & \mapsto 1 \\ 
+     \langle x,y \rangle & \mapsto 1 
 \end{align*}
-qui ne définit aucun autre monoïde que le monoïde libre sur $\{ 1_M \} $. Il faut aussi bien prendre en compte qu'il s'agit d'une $F$-algèbre, et que $F$ embarque avec lui sa source, c'est à dire la catégorie des monoïdes. Avec le même foncteur, sur la catégorie des magmas unifères, notre $F$-algèbre est induite par un magma, et non un monoïde. Tout est donc important : la source du foncteur, et le morphisme. \\ 
-
-Des exemples analogues existent pour nombre de structures algébriques, par exemple : 
+qui ne définit aucun autre monoïde que le monoïde trivial $\{ 1_M \} $. Il faut aussi bien prendre en compte qu'il s'agit d'une $F$-algèbre, et que $F$ embarque avec lui sa source, c'est à dire la catégorie des ensembles. 
+\\ 
+Des exemples analogues existent pour plusieurs structures algébriques, par exemple : 
 \\
-Pour les groupes : on pose
-
+Soit $G$ un groupe d'ensemble sous jacent $G_{Ens}$.
 \begin{align*}
-    F :&  Grp  \rightarrow Grp\\
-      & G  \rightarrow 1 + G + G \times G
+    F :&  \mathbf{Set}  \rightarrow \mathbf{Set}\\
+      & X  \rightarrow 1 + X + X \times X
 \end{align*}
 
-Pour un groupe $G$, on pose 
-
+Est bien un endofoncteur. La $F$-algèbre ($G_{Ens}, \alpha)$ définit notre groupe $G$ : 
 \begin{align*}
-    f : F G & \rightarrow G \\
+    \alpha : F G_{Ens} & \rightarrow G_{Ens} \\
      * & \mapsto 1_G \\ 
      x & \mapsto x^{-1} \\ 
-      \langle x,y \rangle & \mapsto x \cdot y
+     \langle x,y \rangle & \mapsto x \cdot y
 \end{align*}
-\\
-
-Pour les anneaux (unitaires) : on pose
-
+\\ 
+Soit $A$ un anneau d'ensemble sous-jacent $A_{Ens}$.
 \begin{align*}
-    F : CRing & \rightarrow CRing \\
-      A & \rightarrow 1 + 1 + A + A \times A + A \times A
+    F : \mathbf{Set}& \rightarrow \mathbf{Set} \\
+      X & \rightarrow 1 + 1 + X + X \times X + X \times X
 \end{align*}
-
-Pour un anneau unitaire $A$, on pose 
-
+Est bien un endofoncteur de $\mathbf{Set}$. $A$ est défini par la $F$-algèbre ($A_{Ens}$, $\alpha$) où 
 \begin{align*}
-    f : F A & \rightarrow A \\
+    \alpha : F A & \rightarrow A \\
      *_1 & \mapsto 1_A \\
      *_2 & \mapsto 0_A \\ 
      x & \mapsto -x \\ 
       \langle x,y \rangle_1 & \mapsto xy \\ 
     \langle x,y \rangle_2 & \mapsto x+y
 \end{align*}
+Ici on peut différencier $*_1$ et $*_2$ : même si $1$ et $1$ sont les mêmes ensembles, $1+1 = \{ (0,*), (1,*) \}$. 
+\\
 
-Pour les corps, on aurait envie de faire la même chose, en posant par exemple 
+Soit $K$ un corps d'ensemble sous jacent $K_{Ens}$, d'ensemble sous jacent privé du neutre $K_{Ens} \\ \{ 1_K \}$. On voudrait pouvoir faire la même chose que pour les anneaux et les corps, c'est à dire définir un foncteur 
 \begin{align*}
-    F : CField &  \rightarrow CField \\
-      K & \rightarrow 1 + 1 + K + K^* + K \times K + K \times K
+    F : \mathbf{Set} &  \rightarrow \mathbf{Set} \\
+      X & \rightarrow 1 + 1 + X + (X \\ \{1_K\}) + X \times X + X \times X
 \end{align*}
-Mais c'est le $K^*$ qui pose problème : ça ne s'écrit pas vraiment en théorie des catégories (d'ailleurs, ça ne s'écrit pas vraiment en théorie des types non plus). C'est un exemple de limitation de pouvoir expressif des $F$-algèbres (et de la théorie des catégories au sens général). En fait, la théorie des catégories permet de décrire très efficacement l'universalité, c'est à dire des propriétés qui peuvent se réécrire avec un $\forall$. Mais l'inversion multiplicative n'est pas de ces propriétés. Le corps est donc un \textit{non-exemple} de structure algébrique descriptible par une $F$-algèbre. 
+
+$F$ est bien un endofoncteur de $\mathbf{Set}$. $K$ est défini par ($K_{Ens}, \alpha)$ où 
+\begin{align*}
+    \alpha F K_{Ens} & \rightarrow K_{Ens} \\ 
+    *_1 & \mapsto 0_K \\ 
+    *_2 & \mapsto 1_K \\ 
+    x_3 & \mapsto -x \\ 
+    x_3 & \mapsto x^{-1} \\ 
+    \langle x, y \rangle_4 & \mapsto x + y \\ 
+    \langle x, y \rangle_5 & \mapsto xy 
+\end{align*}
+Ici encore : on peut savoir de quel terme du coproduit vient un élément. Notons ici une différence avec les anneaux : pour définir notre foncteur $F$, on a besoin de connaître notre corps (pour pouvoir priver un ensemble du neutre multiplicatif du corps). Donc on peut décrire les corps comme des $F$-algèbres, mais les $F$ sont tous différents : ils dépendent du corps qu'on veut décrire.  
 
 \subsubsection{Types inductifs}
 
 Les types inductifs sont très souvent représentés comme des points fixes de foncteurs bien choisis. Ce foncteur est un "collage" de la définition inductive du type, qui s'écrit dans un formalisme propice (en général une forme de Backus-Naur). Concrètement,  une définition (de style "ocaml") d'un type inductif : 
 \begin{center}
-    $  t := B_1 | ... | B_k | C_1 of A_1 | ... | C_n of A_n $
+    $  t := B_1 | ... | B_k | C_1 \text{ of } A_1 | ... | C_n \text{ of } A_n $
 \end{center}
-veut dire "un élément du type t est soit une constante $B_i$, soit une construction d'un constructeur $C_j$ sur un argument de type $A_j$". Cette définition inductive nous donne immédiatement un foncteur : il suffit que les type des "cas de base" et ceux des arguments puissent être représentés dans une catégorie (souvent, on a besoin qu'elle soit munie de coproduit et de produit pour des arguments qui seraient des n-uplets et des types non triviaux. Cependant, on se ramène très souvent à Set, donc on dispose de tous les outils catégoriques nécessaires). En appelant cette catégorie $C$, le foncteur  associé est alors  un endofoncteur de $C$ : 
+veut dire "un élément du type t est soit une constante $B_i$, soit une construction d'un constructeur $C_j$ sur un argument de type $A_j$". Cette définition inductive nous donne immédiatement un foncteur : il suffit que les type des "cas de base" et ceux des arguments puissent être représentés dans une catégorie (on a besoin qu'elle soit munie de coproduit et de produit qui se comportent comme ceux de $\mathbf{Set}$. En fait, on se ramène très souvent à $\mathbf{Set}$, donc on dispose de tous les outils catégoriques nécessaires). Dans ce document on choisira un objet de $\mathbf{Set}$ pour représenter un type.  
 \begin{align*}
-    F : X \mapsto \sum_{i=1}^k 1 + \sum_{j=1}^n A_j
+    F : \mathbf{Set} & \rightarrow \mathbf{Set} \\ 
+    X \mapsto \sum_{i=1}^k 1 + \sum_{j=1}^n A_j
 \end{align*}
-Le type inductif peut alors être vu comme un point fixe de ce foncteur. Encore une fois, définir notre type inductif comme une $F$-algèbre fournit une définition plus constructive : le morphisme n'indique pas seulement que le type inductif est un point fixe de ce foncteur, mais aussi la façon dont l'application du foncteur au type se comporte : à quoi ressemble l'image d'un élément de $C$ (c'est à dire, un élément du type) par le foncteur ? Cette information est donnée par les constructeurs de notre type inductif, qui seront les parties du morphisme associé à la F-algèbre suivante : on pose \begin{align*}
-    F : X \mapsto \sum_{i=1}^k 1 + \sum_{j=1}^n A_j
-\end{align*}  et $T$ son "plus petit" (c'est la notion que je ne définis pas vraiment ici, mais on peut se ramener au cas où la catégorie modélisant nos types est Set, donc on a un ordre partiel sur cette catégorie, donné par l'inclusion) point fixe. Alors, notre type inductif est $T$, et ses constructeurs sont explicités par la $F$-algèbre suivante : 
+Est bien un endofoncteur de $\mathbf{Set}$. Notons qu'il est constant : il envoie tous les objets sur le même objet. Alors, si $T$ décrit l'ensemble des éléments de notre type, le type inductif et ses constructeurs sont décrits par $(T,\alpha)$ où
 \begin{align*}
     \alpha : & F T \rightarrow T  \\ 
     *_i & \mapsto B_i \\ 
     A_j & \mapsto C_j A_j
 \end{align*}
+C'est une définition abstraite ét généralisée pour les types inductifs : voyons des exemples d'application de cette dernière.  \\ 
 
-
-
-Par exemple, en considérant la définition usuelle du type d'une liste d'entiers naturels : le type est donné par 
+On considère la définition usuelle du type d'une liste d'entiers naturels donnée par 
 \begin{center}
 $l,l' := nil | (n : Nat) :: l'$    
 \end{center}
 Le foncteur associé est donc
-
 \begin{align*}
-F : & Set \rightarrow Set \\       & X \mapsto 1 + \N \times X
+F : & \mathbf{Set} \rightarrow \mathbf{Set} \\       & X \mapsto 1 + \N \times X
 \end{align*}
-et la $F$-algèbre associée, pour l'ensemble $L$ des listes d'entiers naturels, est $(L,\alpha)$, avec 
-
+et la $F$-algèbre associée, pour l'ensemble $L$ des listes d'entiers naturels, est $(L,\alpha)$, où
 \begin{align*}
-\alpha :  FL &  \rightarrow L \\        1 & \mapsto nil  \\ 
-      \langle n, l \rangle &\mapsto n :: l
+\alpha :  FL &  \rightarrow L \\
+          1 & \mapsto nil  \\ 
+          \langle n, l \rangle & \mapsto n :: l
 \end{align*}
 
-Ici on a traité des listes d'entiers naturels, mais on peut très bien le faire en changeant $\N$ en $A$, où $A$ décrit les éléments potentiels de notre liste. De la même façon, on peut définir un arbre d'entiers naturels comme une $F$-algèbre. Le type des arbres d'entiers naturels est donné par 
+Cet exemple se restreint aux listes d'entiers naturels, mais on peut gnéraliser pour obtenir la $F$-algèbre associée au type inductif des listes d'élément de $A$, on pose alors $F : X \mapsto 1 + A \times X$. 
+\\ 
+On considère la définition usuelle du type "arbres d'entiers naturels" donnée par 
 \begin{center}
-    $t := Feuille of \N | A of ( \N , t, t)$
+    $t := F \text{ of }  \N |  A \text{ of } ( \N , t, t)$
 \end{center}
-
+Alors, 
 \begin{align*}
-F : & Set \rightarrow Set \\       & X \mapsto \N + \N \times (X \times X)
+F : & \mathbf{Set} \rightarrow \mathbf{Set} \\       
+    & X \mapsto \N + \N \times (X \times X)
 \end{align*}
-
-$T$ l'ensemble des éléments qui peuvent figurer dans notre arbre, et $\alpha$ : 
-
+est bien un endofoncteur de $\mathbf{Set}$.
+Soit $T$ l'ensemble des arbres possibles, alors le type inductif des arbres d'entiers naturels est défini par la $F$-algèbre  (T,$\alpha$) où 
 \begin{align*}
-\alpha :  FT &  \rightarrow T \\        n & \mapsto Feuille(n)  \\ 
+\alpha :  FT &  \rightarrow T \\
+            n & \mapsto F(n)  \\ 
       \langle n, \langle sag, sad \rangle \rangle &\mapsto A (n, sad, sag)
 \end{align*}
 
-Ces deux exemples sont très basiques, mais presque toutes les structures de données représentables comme un type inductif peuvent être décrites par des $F$-algèbres. 
+Ces deux exemples sont élémentaires, mais modéliser un type inductif comme une $F$-algèbre est une méthode courante pour pouvoir l'étudier d'un point de vue théorique, et notamment pour la formalisation sur ordinateur fondée sur une théorie des catégories d'ordre supérieur.
 
 \subsection{Initialité dans les F-algèbres}
 
@@ -216,50 +256,49 @@ Comem dit précédemment, pour un foncteur $F$, les $F$-algèbres forment une ca
 
 \subsubsection{Récurrence}
 
-Soit $F$ le foncteur suivant : 
+Soit $F$ le foncteur : 
 \begin{align*}
     F : C & \rightarrow C \\ 
     X & \mapsto 1 + X
 \end{align*}
 
-On considère $C$ une catégorie qui modélise l'objet qu'on veut construire par récurrence (très souvent munie d'un coproduit), et $A$ l'objet qui décrit ce qu'on veut construire par récurrence (il peut s'agir d'une suite ou d'une propriété qu'on montre par récurrence par exemple). Alors, notre construction par induction est exactement la donnée d'un élément $0_A$ de $A$, et d'un morphisme de $A$ dans $A$ qui sert à obtenir un "successeur" pour notre définition. Un élément $0$ est exactement la donnée d'un morphisme  
+On considère $C$ une catégorie qui modélise l'objet qu'on veut construire par récurrence (encore une fois : on a besoin de $C$ soit munie d'un coproduit qui ressemble à celui de $\mathbf{Set}$, mais dans on se ramène à $\mathbf{Set}$), et $A$ l'objet qui décrit ce qu'on veut construire par récurrence (il peut s'agir d'une suite ou d'une propriété qu'on montre par récurrence, par exemple). Alors, notre construction par induction est exactement la donnée d'un élément $0_A$ de $A$, et d'un morphisme de $A$ dans $A$ qui sert à obtenir un "successeur" pour notre définition. Un élément $0$ est exactement la donnée d'un morphisme  
 \begin{align*}
 f : & 1  \rightarrow A \\
     & * \mapsto 0_A
-    
 \end{align*}
 
-il s'agit d'une fonction d'un singleton dans $A$ qui associe à l'unique élément de $1$ l'objet $0$ voulu. Cet objet $0_A$ est un prédicat $P(0)$ dans le cas d'une preuve par récurrence, et un premier terme $u_0$ dans le cas d'une construction par récurrence d'une suite, c'est une généralisation du "premier élément" d'une définition par récurrence. Le "successeur" de notre définition peut se définir comme un morphisme \begin{align*}
+il s'agit d'une application d'un singleton dans $A$ qui associe à l'unique élément de $1$ l'objet $0_A$ voulu. Cet objet $0_A$ est un prédicat $P(0)$ dans le cas d'une preuve par récurrence, et un premier terme $u_0$ dans le cas d'une construction par récurrence d'une suite, c'est une généralisation du "premier élément" d'une définition par récurrence. Le "successeur" de la définition peut se définir comme un morphisme 
+\begin{align*}
     g : A &  \rightarrow A \\ 
         x & \mapsto g(x)
 \end{align*}
 
-Dans le cas d'une preuve par récurrence, $g$ associe $P(n+1)$ à $P(n)$, par exemple.
+À titre d'exemple, dans le cas d'une preuve par récurrence, $g$ associe $P(n+1)$ à $P(n)$ .
     
-     Une construction par récurrence se pose donc comme une $F$-algèbre sur $A$ :
+     Une construction par récurrence se décrit donc comme $F$-algèbre ($A$, $\alpha$) où
 \begin{align*}
     \alpha : 1 + A & \rightarrow A \\ 
     * & \mapsto 0_A \\ 
     x & \mapsto g(x)
 \end{align*}
 
-Or, la catégorie des $F$-algèbres admet un objet initial : $(\beta, \N)$ avec : 
+Or, la catégorie des $F$-algèbres admet un objet initial : $(\beta, \N)$ où : 
 \begin{align*}
 \beta : 1 + \N & \rightarrow \N \\
         * & \mapsto 0 \\ 
         n & \mapsto Succ(n)
 \end{align*}
 
-Prouvons son initialité. Soit $(\alpha, A)$ une $F$-algèbre qui décrit une construction par récurrence. Alors, 
+Prouvons son initialité. Soit $(A, \alpha)$ une $F$-algèbre qui décrit une construction par récurrence, où 
 \begin{align*}
     \alpha : 1 + A & \rightarrow A \\ 
     * & \mapsto 0_A \\ 
     x & \mapsto g(x)
 \end{align*}
-
-On pose le morphisme 
+On introduit
 \begin{align*}
-    \eta : (\beta, \N) & \rightarrow ( \alpha, A) \\ 
+    \eta : \N & \rightarrow  A \\ 
     n & \mapsto \alpha^{n+1}(*)    
 \end{align*} 
 Montrons qu'il s'agit bien d'un morphisme de $F$-algèbre. Il suffit de montrer la commutativité du diagramme suivant pour $\eta$ : 
@@ -278,25 +317,27 @@ Sachant que :
         x & \mapsto inr(\eta(x))  
 \end{align*}
 
-Soit $x : 1 + \N$. Si $x = * \in 1$, $ \eta(\beta(x)) = \eta(\beta(*)) = \eta(0) = \alpha(*) = 0_A $ et $ \alpha(F \eta (x)) = \alpha( F \eta (*)) = \alpha(inl(*)) = O_A $. Si $x = n \in \N$, $ \eta(\beta(x)) = \eta(\beta(n)) = \eta(succ(n)) = \alpha^{n+2}(*) $ et $ \alpha( F \eta (x)) = \alpha(F \eta (n)) = \alpha(inr(\eta(n)) = \alpha(\alpha^{n+1}(*)) = \alpha^{n+2}(*) $. Ce morphisme est donc bien un morphisme d'$F$-algèbre. Vérifier l'unicité n'est pas plus difficile : on prend un morphisme $\eta'$ qui fait commuter le diagramme précédent, et on a forcément $\eta'(n+1) = \eta'^n(F\eta'(*)) $. On a établi qu'une construction par récurrence sur des objets de $A$ était une $F$-algèbre avec $A$ pour support, or on a une flèche de $(\N, \eta)$ vers la $F$-algèbre qui définit la construction par récurrence, donc on a simplement à fournir un élément de $F\N$ pour obtenir l'élément souhaité de $A$. 
+Soit $x : 1 + \N$. Si $x = * \in 1$, $ \eta(\beta(x)) = \eta(\beta(*)) = \eta(0) = \alpha(*) = 0_A $ et $ \alpha(F \eta (x)) = \alpha( F \eta (*)) = \alpha(inl(*)) = O_A $. Si $x = n \in \N$, $ \eta(\beta(x)) = \eta(\beta(n)) = \eta(succ(n)) = \alpha^{n+2}(*) $ et $ \alpha( F \eta (x)) = \alpha(F \eta (n)) = \alpha(inr(\eta(n)) = \alpha(\alpha^{n+1}(*)) = \alpha^{n+2}(*) $. Ce morphisme est donc bien un morphisme d'$F$-algèbre. Vérifier l'unicité n'est pas plus difficile : on prend un morphisme $\eta'$ qui fait commuter le diagramme précédent, et on a forcément $\eta'(n+1) = \eta'^n(F\eta'(*)) $. On a établi qu'une construction par récurrence sur des objets de $A$ était une $F$-algèbre avec $A$ pour support, or on a une flèche de $(\N, \eta)$ vers la $F$-algèbre qui définit la construction par récurrence, donc on a simplement à donner un élément de $F\N$ pour obtenir l'élément souhaité de $FA$ : l'élément de base, ou bien la la n-ième itération. 
 
 \subsubsection{Fold}
 
 Le fold est une opération très classique en informatique. Il s'agit de \textit{plier} une liste sur elle même, pour la compacter en un élément. La façon de \textit{plier} un élément avec un autre est donnée par une fonction, et le pli d'aucun élément est donné par un élément de base. En ocaml, le fold correspond à cette opération :
 
-\begin{lstlisting}[language=Ocaml]
- ('a -> 'b -> 'b) -> 'a list -> 'b -> 'b 
-\end{lstlisting}
+//NE FONCTIONNE PAS
+\begin{minted}{ocaml}
+ ('a -> 'b -> 'b) -> 'a list -> 'b -> 'b     
+\end{minted}
 
 Une fonction qui prend un élément de type $A$, et s'évalue en fonction de $B$ dans $B$, une liste d'éléments de type $A$,   un élément "base" de type $B$,  pour donner un type $B$. En voici le code :
 
-\begin{lstlisting}[languague=OCaml]
+\begin{minted}{ocaml}
 let rec fold (f : 'a -> 'b -> 'b) (l : 'a list) (b : 'b) : 'b = 
     match l with 
     | [] -> b
     | x :: xs -> f x (fold f xs b)
-    ;;   
-\end{lstlisting}
+    ;;       
+\end{minted}
+
 
 \begin{lstlisting}[languague=OCaml]
     fold ( + ) (1 :: 2 :: 3 :: []) 0 ;; 
@@ -307,7 +348,7 @@ let rec fold (f : 'a -> 'b -> 'b) (l : 'a list) (b : 'b) : 'b =
 - : string = "1 , 2 , 3 , et c'est fini"
 \end{lstlisting}
 
-Prenons une catégorie qui modélise nos élément de type $A$ , $B$, et $L_A$ les listes d'éléments de $A$. On suppose cette catégorie munie de coproduits et de produits (ce n'est pas une supposition très forte, on peut tout à fait prendre $Set$ pour modéliser nos éléments). Un fold peut donc être vu comme une suite de morphismes : 
+Prenons une catégorie qui modélise nos élément de type $A$ , $B$, et $L_A$ les listes d'éléments de $A$. On suppose cette catégorie munie de coproduits et de produits (ce n'est pas une supposition très forte, on peut tout à fait prendre $\mathbf{Set}$ pour modéliser nos éléments). Un fold peut donc être vu comme une suite de morphismes : 
 \begin{center}
 $ 
 (A \rightarrow B \rightarrow B) \rightarrow L_A \rightarrow B \rightarrow B
@@ -359,6 +400,9 @@ Or, cette $F$-algèbre admet une algèbre initiale. En effet, on pose $L$ les li
 (on peut vérifier l'initialité de l'algèbre exactement de la même façon que dans la partie sur l'induction). Les listes d'éléments de $A$ forment une algèbre initiale. Par conséquent, en composant notre fold et le morphisme de l'objet initial, notre fold est exactement la donnée  d'un morphisme $(FL \rightarrow L) \rightarrow L_A \rightarrow B $, or $FL \rightarrow L$ est déjà donné par $\alpha$. Donc notre fold est équivalent à un morphisme $L_A \rightarrow B$ grâce à l'initialité des listes d'éléments de $A$.
 
 
+
+SECTION NON RELUE
+
 \section{F-coalgèbres}
 
 \subsection{Définition et exemples}
@@ -374,7 +418,7 @@ Une $F$-coalgèbre est l'objet \textit{dual} d'une $F$-algèbre. Cette notion ab
 
 Pour un endofoncteur $F$ défini sur une catégorie $C$, une $F$-coalgèbre est donc la donnée d'un support $A$ (élément de $C$) et d'un morphisme $A \rightarrow FA$. Cette définition peut parâitre troublante une fois qu'on a pleinement compris celle d'une $F$-algèbre : la $F$ algèbre nous permettait d'exprimer une construction, via un morphisme. La coalgèbre, au contraire, permet d'exprimer la "destruction". C'est un formalisme particulièrement approprié  pour décrire des structures infinies, ou des processus qui \textit{pourraient} ne pas s'arrêter.
 
-\subsection{F-algèbres initiales}
+\subsubsection{F-algèbres initiales}
 
 Une $F$-algèbre initiale induit une $F$-coalgèbre. En effet, soit $C$ une catégorie, $F$ un endofoncteur sur $C$, et $A, \alpha$ une $F$-algèbre initiale. Alors, pour toute $F$-algèbre supportée par $X$, il existe une unique flèche $ \alpha'$ de $A$ vers $X$. On pose $X = FA$, on a donc un unique morphisme : 
 \begin{align*}
@@ -383,7 +427,7 @@ Une $F$-algèbre initiale induit une $F$-coalgèbre. En effet, soit $C$ une cat�
 C'est à dire que $A, \alpha'$ constitue une $F$-coalgèbre. En général, $\alpha'$ est d'ailleurs relativement simple à expliciter : lorsqu'on montre que $A$ est support d'une $F$-algèbre initiale, on construit généralement l'unique morphsme pour un objet quelconque, il suffit de remplacer cet objet par $A$.
 Ce résultat a une interprétation moins formelle : l'initialité dans une $F$-algèbre est parfois liée à quelque chose qui \textit{pourrait} ne pas s'arrêter. On a par exemple vu plus haut que la construction de la récursion se décrit via l'initialité d'une $F$-algèbre. Or cette récursion est quelque chose qui ne s'arrête potentiellement pas : on veut pouvoir construire tous les termes d'une suite, par exemple. 
 
-\subsection{Un exemple algébrique : les groupes quotient}
+\subsubsection{Un exemple algébrique : les groupes quotient}
 
 Un groupe quotient reste un groupe, on peut donc exprimer cette transformation par un endofoncteur de $Grp$ à condition que cette transformation soit \textit{fonctorielle}, c'est à dire qu'elle fasse commuter le diagramme suivant pour trois groupes $G_1,G_2,G_3$ et des morphismes $f$ et $g$ : 
 
@@ -420,12 +464,12 @@ Dans tous ces exemples, le quotient par un groupe induit une $F$-algèbre. Soit 
 
 Où $\bar{g}$ est la classe de $g$ suivant le groupe par lequel on quotiente. 
 
-\subsection{Types coinductifs}
+\subsubsection{Types coinductifs}
 Les $F$-coalgèbres  modélisent  souvent un type coinductif. L'intuition d'un type coinductif est la suivante : au lieu de lire une BNF de façon "inductive", i.e avec des cas de base, des constructeurs, on l'interprète de façon coinductive : avec des destructeurs.  \\
 
 Pour modéliser le "destructeur" (prédecesseur) du type des entiers naturels, on peut poser : 
 \begin{align*}
-    F : Set & \rightarrow Set \\ 
+    F : \mathbf{Set} & \rightarrow \mathbf{Set} \\ 
         X & \mapsto 1 + X
 \end{align*}
 
@@ -442,7 +486,7 @@ En fait, cette coalgèbre est terminale pour ce foncteur : exactement comme pour
 
 Pour modéliser un flux de donnée continu (stream), on peut utiliser une $F$-coalgèbre. Pour $A$ un alphabet ,  on pose
 \begin{align*}
-    F : Set & \rightarrow Set \\ 
+    F : \mathbf{Set} & \rightarrow \mathbf{Set} \\ 
         X & \mapsto 1 + A \times X
 \end{align*}
 On modélise l'ensemble de nos états par $X$, et l'état suivant obtenu depuis un état $x$ par $\langle x', t \rangle $ où $t$ est un symbole de l'alphabet.

@@ -126,7 +126,7 @@ Soit $C$ une catégorie, et $F :C \longrightarrow C$ un endofoncteur. Une $F$-al
  
     Les $F$-algèbres fournissent une définition (un peu plus) constructive des structures algébriques usuelles. Par exemple, d'un point de vue catégorique, on pourrait dire qu'un monoïde est simplement un objet de la catégorie monoïdes. Cette définition ne permet pas d'embarquer (d'un point de vue catégoriel) ce qu'il se passe \textit{à l'intérieur} d'un monoïde : rien n'explicite la façon dont se comporte la loi du monoïde. Les monoïdes induisent une $F$-algèbre sur la catégorie des ensembles. En effet, soit $M$ un monoïde, et $ M_{Ens}$ son ensemble sous jacent.  
 \begin{align*}
-    F : \mathbf{Set} & \mathbf{Set} \\
+    F : \mathbf{Set} & \rightarrow \mathbf{Set} \\
     X & \mapsto 1 + X \times X
 \end{align*}
 
@@ -177,23 +177,25 @@ Est bien un endofoncteur de $\mathbf{Set}$. $A$ est défini par la $F$-algèbre 
 Ici on peut différencier $*_1$ et $*_2$ : même si $1$ et $1$ sont les mêmes ensembles, $1+1 = \{ (0,*), (1,*) \}$. 
 \\
 
-Soit $K$ un corps d'ensemble sous jacent $K_{Ens}$, d'ensemble sous jacent privé du neutre $K_{Ens} \\ \{ 1_K \}$. On voudrait pouvoir faire la même chose que pour les anneaux et les corps, c'est à dire définir un foncteur 
+Soit $K$ un corps d'ensemble sous jacent $K_{Ens}$, d'ensemble sous jacent privé du neutre $K_{Ens} - \{ 0_K \}$.
 \begin{align*}
-    F : \mathbf{Set} &  \rightarrow \mathbf{Set} \\
-      X & \rightarrow 1 + 1 + X + (X \\ \{1_K\}) + X \times X + X \times X
+    F_K : \mathbf{Set} &  \rightarrow \mathbf{Set} \\
+      X & \rightarrow 1 + 1 + X + (X - \{0_K\}) + X \times X + X \times X
 \end{align*}
 
-$F$ est bien un endofoncteur de $\mathbf{Set}$. $K$ est défini par ($K_{Ens}, \alpha)$ où 
+est bien un endofoncteur de \textbf{Set}. $K$ est donc bien défini par la $F_K$-algèbre ($K$,$\alpha$) où 
+
 \begin{align*}
-    \alpha F K_{Ens} & \rightarrow K_{Ens} \\ 
-    *_1 & \mapsto 0_K \\ 
-    *_2 & \mapsto 1_K \\ 
-    x_3 & \mapsto -x \\ 
-    x_3 & \mapsto x^{-1} \\ 
-    \langle x, y \rangle_4 & \mapsto x + y \\ 
-    \langle x, y \rangle_5 & \mapsto xy 
+    \alpha F_K K & \rightarrow K \\ 
+    *_1 &\mapsto 1_K \\ 
+    *_2 &\mapsto 0_K \\ 
+    x_1 &\mapsto -x \\
+    x_2 &\mapsto x^{-1} \\ 
+    \langle x,y \rangle_1 &\mapsto x+y \\ 
+    \langle x,y \rangle_2 &\mapsto xy
 \end{align*}
-Ici encore : on peut savoir de quel terme du coproduit vient un élément. Notons ici une différence avec les anneaux : pour définir notre foncteur $F$, on a besoin de connaître notre corps (pour pouvoir priver un ensemble du neutre multiplicatif du corps). Donc on peut décrire les corps comme des $F$-algèbres, mais les $F$ sont tous différents : ils dépendent du corps qu'on veut décrire.  
+
+On remarque cependant que le foncteur $F$ tel qu'il est défini dépend de $K$ : il doit inclure la donnée de son neutre additif. La définition est donc moins forte : les corps ne sont pas la donnée d'une $F$-algèbre, ils sont la donnée d'un foncteur $F_K$ et d'une $F_K$-algèbre.
 
 \subsubsection{Types inductifs}
 

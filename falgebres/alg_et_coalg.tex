@@ -20,7 +20,7 @@
 
 \newcommand{\N}{\mathbb{N}}
 \newcommand{\Z}{\mathbb{Z}}
-
+\lstset{language=Caml}
 \title{F-algèbres et F-coalgèbres}
 \date{April 2024}
 
@@ -195,26 +195,27 @@ est bien un endofoncteur de \textbf{Set}. $K$ est donc bien défini par la $F_K$
     \langle x,y \rangle_2 &\mapsto xy
 \end{align*}
 
-On remarque cependant que le foncteur $F$ tel qu'il est défini dépend de $K$ : il doit inclure la donnée de son neutre additif. La définition est donc moins forte : les corps ne sont pas la donnée d'une $F$-algèbre, ils sont la donnée d'un foncteur $F_K$ et d'une $F_K$-algèbre.
+On remarque cependant que le foncteur $F$ tel qu'il est défini dépend de $K$ : il doit inclure la donnée de son neutre additif. La définition est donc moins forte : les corps ne sont pas la donnée d'une $F$-algèbre, ils sont la donnée d'un foncteur $F_K$ et d'une $F_K$-algèbre. La faiblesse de ce modélisation illustre un fait sur l'interprétation catégorique des corps : les propriétés ne sont pas toutes universelles (en particulier, tous les éléments n'admettent pas d'inverse multiplicatif), ce qui donne un comportement assez pauvre d'un point de vue catégorique.
 
 \subsubsection{Types inductifs}
 
-Les types inductifs sont très souvent représentés comme des points fixes de foncteurs bien choisis. Ce foncteur est un "collage" de la définition inductive du type, qui s'écrit dans un formalisme propice (en général une forme de Backus-Naur). Concrètement,  une définition (de style "ocaml") d'un type inductif : 
+
+Un outil puissant pour décrire les types inductifs est la forme de Backus-Naur. Dans cette section, on s'intéresse à des types représentés par un genre de forme de Backus-Naur. Concrètement, une forme de Backus-Naur : 
 \begin{center}
-    $  t := B_1 | ... | B_k | C_1 \text{ of } A_1 | ... | C_n \text{ of } A_n $
+    $  t := B_1 | ... | B_k | C_1 \text{ of } P_1(T) | ... | C_n \text{ of } P_n(T) $
 \end{center}
-veut dire "un élément du type t est soit une constante $B_i$, soit une construction d'un constructeur $C_j$ sur un argument de type $A_j$". Cette définition inductive nous donne immédiatement un foncteur : il suffit que les type des "cas de base" et ceux des arguments puissent être représentés dans une catégorie (on a besoin qu'elle soit munie de coproduit et de produit qui se comportent comme ceux de $\mathbf{Set}$. En fait, on se ramène très souvent à $\mathbf{Set}$, donc on dispose de tous les outils catégoriques nécessaires). Dans ce document on choisira un objet de $\mathbf{Set}$ pour représenter un type.  
+veut dire "un élément du type t est soit une constante $B_i$, soit une construction d'un constructeur $C_j$ sur un argument qui est un "polynôme" de $T$, c'est à dire une expression formée de produits et coproduits de $T$, et de types constants. Cette définition inductive nous donne immédiatement un foncteur (sous l'hypothèse qu'on peut modéliser tous les types en jeu par des objets de $\mathbf{Set}$).  
 \begin{align*}
     F : \mathbf{Set} & \rightarrow \mathbf{Set} \\ 
-    X \mapsto \sum_{i=1}^k 1 + \sum_{j=1}^n A_j
+    X & \mapsto \sum_{i=1}^k 1 + \sum_{j=1}^n C_j P_j(X)
 \end{align*}
-Est bien un endofoncteur de $\mathbf{Set}$. Notons qu'il est constant : il envoie tous les objets sur le même objet. Alors, si $T$ décrit l'ensemble des éléments de notre type, le type inductif et ses constructeurs sont décrits par $(T,\alpha)$ où
+Est bien un endofoncteur de $\mathbf{Set}$. Alors, si $T$ décrit l'ensemble des éléments de notre type, le type inductif et ses constructeurs sont décrits par $(T,\alpha)$ où
 \begin{align*}
     \alpha : & F T \rightarrow T  \\ 
     *_i & \mapsto B_i \\ 
-    A_j & \mapsto C_j A_j
+    P_j(T) & \mapsto C_j P(T)
 \end{align*}
-C'est une définition abstraite ét généralisée pour les types inductifs : voyons des exemples d'application de cette dernière.  \\ 
+C'est une définition abstraite et généralisée pour les types inductifs : voyons des exemples d'application de cette dernière.  \\ 
 
 On considère la définition usuelle du type d'une liste d'entiers naturels donnée par 
 \begin{center}
@@ -222,7 +223,8 @@ $l,l' := nil | (n : Nat) :: l'$
 \end{center}
 Le foncteur associé est donc
 \begin{align*}
-F : & \mathbf{Set} \rightarrow \mathbf{Set} \\       & X \mapsto 1 + \N \times X
+F : & \mathbf{Set} \rightarrow \mathbf{Set} \\
+& X \mapsto 1 + \N \times X
 \end{align*}
 et la $F$-algèbre associée, pour l'ensemble $L$ des listes d'entiers naturels, est $(L,\alpha)$, où
 \begin{align*}
@@ -231,11 +233,11 @@ et la $F$-algèbre associée, pour l'ensemble $L$ des listes d'entiers naturels,
           \langle n, l \rangle & \mapsto n :: l
 \end{align*}
 
-Cet exemple se restreint aux listes d'entiers naturels, mais on peut gnéraliser pour obtenir la $F$-algèbre associée au type inductif des listes d'élément de $A$, on pose alors $F : X \mapsto 1 + A \times X$. 
+Cet exemple se restreint aux listes d'entiers naturels, mais on peut gnéraliser pour obtenir la $F$-algèbre associée au type inductif des listes d'élément de $A$, on pose alors $F : X \mapsto 1 + A \times X$ : on fait varier la partie "constante" du polynôme en $X$. 
 \\ 
 On considère la définition usuelle du type "arbres d'entiers naturels" donnée par 
 \begin{center}
-    $t := F \text{ of }  \N |  A \text{ of } ( \N , t, t)$
+    $t := F \text{ of }  \N |  A \text{ of } \N \times t \times t$
 \end{center}
 Alors, 
 \begin{align*}
@@ -243,7 +245,7 @@ F : & \mathbf{Set} \rightarrow \mathbf{Set} \\
     & X \mapsto \N + \N \times (X \times X)
 \end{align*}
 est bien un endofoncteur de $\mathbf{Set}$.
-Soit $T$ l'ensemble des arbres possibles, alors le type inductif des arbres d'entiers naturels est défini par la $F$-algèbre  (T,$\alpha$) où 
+Soit $T$ le type des arbres d'entiers, alors $T$  (et ses constructeurs) est défini par la $F$-algèbre  (T,$\alpha$) où 
 \begin{align*}
 \alpha :  FT &  \rightarrow T \\
             n & \mapsto F(n)  \\ 
@@ -252,6 +254,7 @@ Soit $T$ l'ensemble des arbres possibles, alors le type inductif des arbres d'en
 
 Ces deux exemples sont élémentaires, mais modéliser un type inductif comme une $F$-algèbre est une méthode courante pour pouvoir l'étudier d'un point de vue théorique, et notamment pour la formalisation sur ordinateur fondée sur une théorie des catégories d'ordre supérieur.
 
+PARTIE PAS RELUE
 \subsection{Initialité dans les F-algèbres}
 
 Comem dit précédemment, pour un foncteur $F$, les $F$-algèbres forment une catégorie. L'existence d'un objet initial dans ces catégories nous donne divers éléments utiles, en voici deux. 
@@ -325,11 +328,10 @@ Soit $x : 1 + \N$. Si $x = * \in 1$, $ \eta(\beta(x)) = \eta(\beta(*)) = \eta(0)
 
 Le fold est une opération très classique en informatique. Il s'agit de \textit{plier} une liste sur elle même, pour la compacter en un élément. La façon de \textit{plier} un élément avec un autre est donnée par une fonction, et le pli d'aucun élément est donné par un élément de base. En ocaml, le fold correspond à cette opération :
 
-//NE FONCTIONNE PAS
-\begin{minted}{ocaml}
- ('a -> 'b -> 'b) -> 'a list -> 'b -> 'b     
-\end{minted}
-
+\begin{lstlisting}
+ ('a -> 'b -> 'b) -> 'a list -> 'b -> 'b
+\end{lstlisting}
+ 
 Une fonction qui prend un élément de type $A$, et s'évalue en fonction de $B$ dans $B$, une liste d'éléments de type $A$,   un élément "base" de type $B$,  pour donner un type $B$. En voici le code :
 
 \begin{minted}{ocaml}
@@ -401,15 +403,11 @@ Or, cette $F$-algèbre admet une algèbre initiale. En effet, on pose $L$ les li
 
 (on peut vérifier l'initialité de l'algèbre exactement de la même façon que dans la partie sur l'induction). Les listes d'éléments de $A$ forment une algèbre initiale. Par conséquent, en composant notre fold et le morphisme de l'objet initial, notre fold est exactement la donnée  d'un morphisme $(FL \rightarrow L) \rightarrow L_A \rightarrow B $, or $FL \rightarrow L$ est déjà donné par $\alpha$. Donc notre fold est équivalent à un morphisme $L_A \rightarrow B$ grâce à l'initialité des listes d'éléments de $A$.
 
-
-
-SECTION NON RELUE
-
 \section{F-coalgèbres}
 
 \subsection{Définition et exemples}
 
-Une $F$-coalgèbre est l'objet \textit{dual} d'une $F$-algèbre. Cette notion abstraite peut se simplifier : une $F$-algèbre fait commuter un diagramme dont on a retourné les flèches.
+Une $F$-coalgèbre est l'objet \textit{dual} d'une $F$-algèbre. Cette notion abstraite peut se simplifier : une $F$-coalgèbre fait commuter le diagramme d'une $F$-algèbre dont on a "retourné" les flèches.
 
 \begin{center}
 \begin{tikzcd}
@@ -418,7 +416,7 @@ Une $F$-coalgèbre est l'objet \textit{dual} d'une $F$-algèbre. Cette notion ab
 \end{tikzcd}    
 \end{center}
 
-Pour un endofoncteur $F$ défini sur une catégorie $C$, une $F$-coalgèbre est donc la donnée d'un support $A$ (élément de $C$) et d'un morphisme $A \rightarrow FA$. Cette définition peut parâitre troublante une fois qu'on a pleinement compris celle d'une $F$-algèbre : la $F$ algèbre nous permettait d'exprimer une construction, via un morphisme. La coalgèbre, au contraire, permet d'exprimer la "destruction". C'est un formalisme particulièrement approprié  pour décrire des structures infinies, ou des processus qui \textit{pourraient} ne pas s'arrêter.
+Pour un endofoncteur $F$ défini sur une catégorie $C$, une $F$-coalgèbre est donc la donnée d'un support $A$ (élément de $C$) et d'un morphisme $A \rightarrow FA$. Cette définition peut paraître troublante une fois qu'on a pleinement compris celle d'une $F$-algèbre : la $F$ algèbre nous permettait d'exprimer une construction, via un morphisme. La coalgèbre, au contraire, permet d'exprimer la "destruction". C'est un formalisme particulièrement approprié  pour décrire des structures potentiellement infinies, ou des processus qui \textit{pourraient} ne pas s'arrêter.
 
 \subsubsection{F-algèbres initiales}
 
@@ -426,7 +424,7 @@ Une $F$-algèbre initiale induit une $F$-coalgèbre. En effet, soit $C$ une cat�
 \begin{align*}
     \alpha' : A & \rightarrow FA 
 \end{align*}
-C'est à dire que $A, \alpha'$ constitue une $F$-coalgèbre. En général, $\alpha'$ est d'ailleurs relativement simple à expliciter : lorsqu'on montre que $A$ est support d'une $F$-algèbre initiale, on construit généralement l'unique morphsme pour un objet quelconque, il suffit de remplacer cet objet par $A$.
+C'est à dire que $(A, \alpha')$ constitue une $F$-coalgèbre. En général, $\alpha'$ est d'ailleurs déjà explicité à ce stade : lorsqu'on montre que $A$ est support d'une $F$-algèbre initiale, on construit l'unique morphsme pour un objet quelconque, il suffit de remplacer cet objet par $A$.
 Ce résultat a une interprétation moins formelle : l'initialité dans une $F$-algèbre est parfois liée à quelque chose qui \textit{pourrait} ne pas s'arrêter. On a par exemple vu plus haut que la construction de la récursion se décrit via l'initialité d'une $F$-algèbre. Or cette récursion est quelque chose qui ne s'arrête potentiellement pas : on veut pouvoir construire tous les termes d'une suite, par exemple. 
 
 \subsubsection{Un exemple algébrique : les groupes quotient}

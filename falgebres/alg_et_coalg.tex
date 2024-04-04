@@ -88,19 +88,19 @@ Le respect de la composition pour les foncteurs s'exprime par la commutativité 
 Voici des exemples de foncteurs courants : 
 \begin{itemize}
     \item Pour toute catégorie $C$, un foncteur identité de $C$ dans $C$ est défini : il envoie tout élément sur lui même, et tout morphisme sur lui même. 
-    \item Le foncteur constant  envoie tous les objets de la catégorie de départ sur le même objet de la catégorie d'arrivée et qui envoie chaque flèche de la catégorie de départ sur l'identité de l'objet image. C'est l'objet terminal de la catégorie des foncteurs.
+    \item Les foncteurs constants  envoient tous les objets de la catégorie de départ sur le même objet de la catégorie d'arrivée et  chaque flèche de la catégorie de départ sur l'identité de l'objet image. C'est l'objet terminal de la catégorie des foncteurs.
     \item Les foncteurs d'oubli "oublient" certaines propriétés des objets d'une catégorie. Par exemple, dans la catégorie des groupes, les objets sont des groupes donc des monoïdes munis d'un axiome d'inversibilité, et les morphismes sont (en particulier) des morphismes de monoïdes. Donc on peut "oublier" la propriété d'inverse, c'est le foncteur d'oubli de la catégorie $\mathbf{Grp}$ dans $Mon$ qui envoie tout groupe sur son monoïde sous jacent, et tout morphisme de groupe sur lui même (si la compatibilité de l'inversion avait fait partie de la définition de morphisme, elle aurait été \textit{oubliée}, mais ce n'est qu'une propriété qui découle des axiomes du groupe. Donc la définition d'un morphisme de groupe est la même que celle d'un morphisme de monoïde). On peut faire la même chose avec toute structure algébrique "strictement plus faible" qu'un groupe : on peut oublier toutes les propriétés d'un groupe de façon fonctonrielle, jusqu'à envoyer $\mathbf{Grp}$ sur $\mathbf{Set}$, en ne gardant que l'information d'ensemble (ensemble sous jacent du groupe), et d'application (contenue dans l'information du morphisme de groupes). 
 \end{itemize}
 
 \subsection{Produits, coproduits}
 
-Définir formellement ici la notion de produit et coproduit ne serait pas forcément pertinent. Comme dit plus tôt, je pense que la meilleure façon d'apprendre la théorie des catégories est de se confronter à des exemples, et d'aller chercher la partie théorique nécessaire à leur compréhension. Une définition formelle et abordable se trouve dans le \cite{MacLane} (page 62), une ressource régulièrement recommandée pour s'introduire à la théorie des catégories. Mais pour lire ce document, il suffit de savoir que sur la catégorie des ensembles $\mathbf{Set}$, le coproduit (noté $+$) est l'union disjointe entre deux ensembles. Notons alors que dans une union disjointe $A+B$ on peut différencier un élément de $A$ d'un élément de $B$ : ça nous permet entre autres de définir des application avec un "pattern matching", qui se comprortent différemment sur la première et la seconde composante de du coproduit. Par exemple, on peut définir le morphisme de $\N + \Z$ qui à un entier naturel associe son successeur, et à un entier associe son prédécesseur : 
+Définir formellement ici la notion de produit et coproduit ne serait pas forcément pertinent. Comme dit plus tôt, l'objectif de la section est de donner uniquement les éléments catégoriques nécessaires à la compréhension du document. Aussi, nous ne définirons pas ici la notion de produit/coproduit dans une catégorie. Une définition formelle et abordable se trouve dans le \cite{MacLane} (page 62), une ressource régulièrement recommandée pour s'introduire à la théorie des catégories. Mais pour lire ce document, il suffit de savoir que sur la catégorie des ensembles $\mathbf{Set}$, le coproduit (noté $+$) est l'union disjointe entre deux ensembles. Notons alors que dans une union disjointe $A+B$ on peut différencier un élément de $A$ d'un élément de $B$ : ça nous permet entre autres de définir des application avec un "pattern matching", qui se comprortent différemment sur la première et la seconde composante de du coproduit. Par exemple, on peut définir le morphisme de $\N + \Z$ qui à un entier naturel associe son successeur, et à un entier associe son prédécesseur : 
 \begin{align*}
      \alpha : \N + \Z & \rightarrow \Z \\ 
      n & \mapsto n+1 \\ 
      k & \mapsto k-1     
 \end{align*}
-La donnée d'un élément de $\Z$ et d'un ensemble $X$ nous donnent la donnée d'un élément de $\Z + X$, donc si on veut avoir pour codomaine un comproduit, on peut "injecter" l'élément d'un ensemble $A$ dans le coproduit $A+B$. Concrètement,  un élément $a \in A$ s'injecte dans $A+B$ comme $(0,a)$. Pour réaliser cette injection, on peut utiliser $inr$. L'équivalent pour l'injection à gauche est $inl$. Si on veut définir $\alpha$ comme un endomorphisme de $\N + \Z$, on peut donc le réécrire en utilisant ces injections :
+Les donnée d'un élément de $\Z$ et d'un ensemble $X$ nous donnent la donnée d'un élément de $\Z + X$, donc si on veut avoir pour codomaine un comproduit, on peut "injecter" l'élément d'un ensemble $A$ dans le coproduit $A+B$. Concrètement,  un élément $a \in A$ s'injecte dans $A+B$ comme $(0,a)$. Pour réaliser cette injection, on peut utiliser $inr$. L'équivalent pour l'injection à gauche est $inl$. Si on veut définir $\alpha$ comme un endomorphisme de $\N + \Z$, on peut donc le réécrire en utilisant ces injections :
 \begin{align*}
      \alpha : \N + \Z & \rightarrow \N + \Z \\ 
      n & \mapsto inl(n+1) \\ 
@@ -122,7 +122,7 @@ Soit $C$ une catégorie, et $F :C \longrightarrow C$ un endofoncteur. Une $F$-al
 \end{center}
 
  
-\subsubsection{Exemples (et non exemples) algébriques}
+\subsubsection{Exemples (et non exemple) algébriques}
  
     Les $F$-algèbres fournissent une définition (un peu plus) constructive des structures algébriques usuelles. Par exemple, d'un point de vue catégorique, on pourrait dire qu'un monoïde est simplement un objet de la catégorie monoïdes. Cette définition ne permet pas d'embarquer (d'un point de vue catégoriel) ce qu'il se passe \textit{à l'intérieur} d'un monoïde : rien n'explicite la façon dont se comporte la loi du monoïde. Les monoïdes induisent une $F$-algèbre sur la catégorie des ensembles. En effet, soit $M$ un monoïde, et $ M_{Ens}$ son ensemble sous jacent.  
 \begin{align*}
@@ -254,7 +254,6 @@ Soit $T$ le type des arbres d'entiers, alors $T$  (et ses constructeurs) est dé
 
 Ces deux exemples sont élémentaires, mais modéliser un type inductif comme une $F$-algèbre est une méthode courante pour pouvoir l'étudier d'un point de vue théorique, et notamment pour la formalisation sur ordinateur fondée sur une théorie des catégories d'ordre supérieur.
 
-PARTIE PAS RELUE
 \subsection{Initialité dans les F-algèbres}
 
 Comem dit précédemment, pour un foncteur $F$, les $F$-algèbres forment une catégorie. L'existence d'un objet initial dans ces catégories nous donne divers éléments utiles, en voici deux. 
@@ -267,21 +266,20 @@ Soit $F$ le foncteur :
     X & \mapsto 1 + X
 \end{align*}
 
-On considère $C$ une catégorie qui modélise l'objet qu'on veut construire par récurrence (encore une fois : on a besoin de $C$ soit munie d'un coproduit qui ressemble à celui de $\mathbf{Set}$, mais dans on se ramène à $\mathbf{Set}$), et $A$ l'objet qui décrit ce qu'on veut construire par récurrence (il peut s'agir d'une suite ou d'une propriété qu'on montre par récurrence, par exemple). Alors, notre construction par induction est exactement la donnée d'un élément $0_A$ de $A$, et d'un morphisme de $A$ dans $A$ qui sert à obtenir un "successeur" pour notre définition. Un élément $0$ est exactement la donnée d'un morphisme  
+On considère $C$ une catégorie qui modélise l'objet qu'on veut construire par récurrence (encore une fois : on se ramène au cas $C = \mathbf{Set}$), et $A$ l'objet qui décrit ce qu'on veut construire par récurrence (il peut s'agir d'une suite ou d'une propriété qu'on montre par récurrence, par exemple). Alors, notre construction par induction est exactement la donnée d'un élément $0_A$ de $A$, et d'un morphisme de $A$ dans $A$ qui sert à obtenir un "successeur" pour notre définition. Un élément $0_A$ est exactement la donnée d'un morphisme  
 \begin{align*}
 f : & 1  \rightarrow A \\
     & * \mapsto 0_A
 \end{align*}
 
-il s'agit d'une application d'un singleton dans $A$ qui associe à l'unique élément de $1$ l'objet $0_A$ voulu. Cet objet $0_A$ est un prédicat $P(0)$ dans le cas d'une preuve par récurrence, et un premier terme $u_0$ dans le cas d'une construction par récurrence d'une suite, c'est une généralisation du "premier élément" d'une définition par récurrence. Le "successeur" de la définition peut se définir comme un morphisme 
+ Cet objet $0_A$ est, par exemple, un prédicat $P(0)$ dans le cas d'une preuve par récurrence, et un premier terme $u_0$ dans le cas d'une construction par récurrence d'une suite, c'est une généralisation du "premier élément" d'une définition par récurrence. Le "successeur" de la définition peut se définir comme un morphisme 
 \begin{align*}
     g : A &  \rightarrow A \\ 
         x & \mapsto g(x)
 \end{align*}
 
-À titre d'exemple, dans le cas d'une preuve par récurrence, $g$ associe $P(n+1)$ à $P(n)$ .
-    
-     Une construction par récurrence se décrit donc comme $F$-algèbre ($A$, $\alpha$) où
+À titre d'exemple, dans le cas d'une preuve par récurrence, $g$ associe $P(n+1)$ à $P(n)$.
+   Une construction par récurrence se décrit donc comme $F$-algèbre ($A$, $\alpha$) où
 \begin{align*}
     \alpha : 1 + A & \rightarrow A \\ 
     * & \mapsto 0_A \\ 
@@ -322,28 +320,30 @@ Sachant que :
         x & \mapsto inr(\eta(x))  
 \end{align*}
 
-Soit $x : 1 + \N$. Si $x = * \in 1$, $ \eta(\beta(x)) = \eta(\beta(*)) = \eta(0) = \alpha(*) = 0_A $ et $ \alpha(F \eta (x)) = \alpha( F \eta (*)) = \alpha(inl(*)) = O_A $. Si $x = n \in \N$, $ \eta(\beta(x)) = \eta(\beta(n)) = \eta(succ(n)) = \alpha^{n+2}(*) $ et $ \alpha( F \eta (x)) = \alpha(F \eta (n)) = \alpha(inr(\eta(n)) = \alpha(\alpha^{n+1}(*)) = \alpha^{n+2}(*) $. Ce morphisme est donc bien un morphisme d'$F$-algèbre. Vérifier l'unicité n'est pas plus difficile : on prend un morphisme $\eta'$ qui fait commuter le diagramme précédent, et on a forcément $\eta'(n+1) = \eta'^n(F\eta'(*)) $. On a établi qu'une construction par récurrence sur des objets de $A$ était une $F$-algèbre avec $A$ pour support, or on a une flèche de $(\N, \eta)$ vers la $F$-algèbre qui définit la construction par récurrence, donc on a simplement à donner un élément de $F\N$ pour obtenir l'élément souhaité de $FA$ : l'élément de base, ou bien la la n-ième itération. 
+Soit $x : 1 + \N$. Si $x = * \in 1$, $ \eta(\beta(x)) = \eta(\beta(*)) = \eta(0) = \alpha(*) = 0_A $ et $ \alpha(F \eta (x)) = \alpha( F \eta (*)) = \alpha(inl(*)) = O_A $. Si $x = n \in \N$, $ \eta(\beta(x)) = \eta(\beta(n)) = \eta(succ(n)) = \alpha^{n+2}(*) $ et $ \alpha( F \eta (x)) = \alpha(F \eta (n)) = \alpha(inr(\eta(n)) = \alpha(\alpha^{n+1}(*)) = \alpha^{n+2}(*) $. Ce morphisme est donc bien un morphisme d'$F$-algèbre. Vérifier l'unicité n'est pas plus difficile : on prend un morphisme $\eta'$ qui fait commuter le diagramme précédent, et on a forcément $\eta'(n+1) = \eta'^n(F\eta'(*)) $. On a établi qu'une construction par récurrence sur des objets de $A$ était une $F$-algèbre avec $A$ pour support, or on a une flèche de $(\N, \eta)$ vers la $F$-algèbre qui définit la construction par récurrence, donc on a simplement à donner un élément de $F\N$ pour obtenir l'élément souhaité de $FA$ : l'élément de base $0_A$, ou bien la la n-ième itération. 
+
 
 \subsubsection{Fold}
 
-Le fold est une opération très classique en informatique. Il s'agit de \textit{plier} une liste sur elle même, pour la compacter en un élément. La façon de \textit{plier} un élément avec un autre est donnée par une fonction, et le pli d'aucun élément est donné par un élément de base. En ocaml, le fold correspond à cette opération :
+Le fold est une opération très classique en informatique. Il s'agit de \textit{plier} une liste sur elle même, pour la compacter en un élément. La façon de \textit{plier} un élément avec un autre est donnée par une fonction, et le pli d'un élément sur lui même est donné par un élément de base. En Ocaml, le fold correspond à cette opération :
 
 \begin{lstlisting}
- ('a -> 'b -> 'b) -> 'a list -> 'b -> 'b
+ ('a -> 'b -> 'b) -> 'b -> 'a list  -> 'b
 \end{lstlisting}
  
 Une fonction qui prend un élément de type $A$, et s'évalue en fonction de $B$ dans $B$, une liste d'éléments de type $A$,   un élément "base" de type $B$,  pour donner un type $B$. En voici le code :
 
-\begin{minted}{ocaml}
-let rec fold (f : 'a -> 'b -> 'b) (l : 'a list) (b : 'b) : 'b = 
+\begin{lstlisting}
+let rec fold (f : 'a -> 'b -> 'b) (b : 'b) (l : 'a list)  : 'b = 
     match l with 
     | [] -> b
     | x :: xs -> f x (fold f xs b)
-    ;;       
-\end{minted}
+    ;;           
+\end{lstlisting}
 
+Et quelques exemples d'application directe :
 
-\begin{lstlisting}[languague=OCaml]
+\begin{lstlisting}
     fold ( + ) (1 :: 2 :: 3 :: []) 0 ;; 
 - : int = 6 
     fold ( ^ ) ("Qui " :: "est " :: "John " :: "Galt" :: []) "?" ;; 
@@ -352,10 +352,10 @@ let rec fold (f : 'a -> 'b -> 'b) (l : 'a list) (b : 'b) : 'b =
 - : string = "1 , 2 , 3 , et c'est fini"
 \end{lstlisting}
 
-Prenons une catégorie qui modélise nos élément de type $A$ , $B$, et $L_A$ les listes d'éléments de $A$. On suppose cette catégorie munie de coproduits et de produits (ce n'est pas une supposition très forte, on peut tout à fait prendre $\mathbf{Set}$ pour modéliser nos éléments). Un fold peut donc être vu comme une suite de morphismes : 
+Prenons une catégorie (en pratique, $\mathbf{Set}$) qui modélise nos élément de type $A$ , $B$, et $L_A$ les listes d'éléments de $A$. Un fold peut donc être vu comme une suite de morphismes (au sens de $\mathbf{Set}$, donc une suite d'applications) : 
 \begin{center}
 $ 
-(A \rightarrow B \rightarrow B) \rightarrow L_A \rightarrow B \rightarrow B
+(A \rightarrow B \rightarrow B) \rightarrow B \rightarrow L_A \rightarrow B 
 $    
 \end{center}
 
@@ -367,7 +367,7 @@ $(A \rightarrow B \rightarrow B) \rightarrow B \rightarrow L_A \rightarrow B \co
 $
     
 \end{center}
-(un élément de $B$ est exactement la donnée d'un morphisme $1 \rightarrow B$)
+Un élément de $B$ est exactement la donnée d'un morphisme $1 \rightarrow B$.
 \begin{center}
     
 $ (A \rightarrow B \rightarrow B)  \rightarrow (1 \rightarrow B)   \rightarrow L_A \rightarrow B \cong \\ 
@@ -375,17 +375,17 @@ $ (A \rightarrow B \rightarrow B)  \rightarrow (1 \rightarrow B)   \rightarrow L
 $
 \end{center}
 
-Un morphisme $A \rightarrow B \rightarrow B$ donne les mêmes informations qu'un morphisme $ A \times B \rightarrow B$ : c'est la Curryfication. 
+Un morphisme $A \rightarrow B \rightarrow B$ donne les mêmes informations qu'un morphisme $ A \times B \rightarrow B$ : c'est la Curryfication. Dans l'idée ça revient à dire qu'une fonction $f$ d'un couple $x,y$ qui donne un résultat $z$ est une fonction d'un élément $x$ qui donne une fonction $y \rightarrow z$.
 
 \begin{center}
     $(A \times B \rightarrow B) \rightarrow (1 \rightarrow B) \rightarrow L_A \rightarrow B) \cong \\ 
     (1 + A \times B ) \rightarrow B) \rightarrow L_A \rightarrow B  $
 \end{center}
-Un morphisme $X \rightarrow Y$ et un morphisme $ Z \rightarrow Y$ nous donne un morphisme $X + Z \rightarrow Y$ dans une catégorie munie de coproduits : il suffit de construire le morphisme par disjonction de cas, comme un filtrage de motif. \\ 
+Un morphisme $X \rightarrow Y$ et un morphisme $ Z \rightarrow Y$ nous donne un morphisme $X + Z \rightarrow Y$ dans $\mathbf{Set}$ : il suffit de construire le morphisme par disjonction de cas, comme un filtrage de motif. \\ 
 
 Un fold est donc la donnée de cette suite de morphisme. 
 \begin{center}
-    $ (1 + A \times B ) \rightarrow B) \rightarrow L_A \rightarrow B$ 
+    $ (1 + A \times B \rightarrow B) \rightarrow L_A \rightarrow B$ 
 \end{center}
 
 On remarque que le premier élément peut s'exprimer comme une $F$-algèbre. En effet, on pose :  
@@ -393,15 +393,16 @@ On remarque que le premier élément peut s'exprimer comme une $F$-algèbre. En 
     F : C & \rightarrow C \\
         X & \mapsto 1 + A \times X 
 \end{align*}
-
-Or, cette $F$-algèbre admet une algèbre initiale. En effet, on pose $L$ les listes d'éléments de $A$ et 
+Ce morphisme est donc un morphisme $ FB \rightarrow B$. Or, cette $F$-algèbre admet une algèbre initiale. En effet, on pose $L$ les listes d'éléments de $A$ et 
 \begin{align*}
-    \alpha : 1 + A \times L & \rightarrow L \\ 
+    \alpha : 1 + A \times L_A & \rightarrow L_A \\ 
     * & \mapsto \text{liste vide} \\
     \langle x, l \rangle & \mapsto \text{l à laquelle on a ajouté x}
 \end{align*}
 
-(on peut vérifier l'initialité de l'algèbre exactement de la même façon que dans la partie sur l'induction). Les listes d'éléments de $A$ forment une algèbre initiale. Par conséquent, en composant notre fold et le morphisme de l'objet initial, notre fold est exactement la donnée  d'un morphisme $(FL \rightarrow L) \rightarrow L_A \rightarrow B $, or $FL \rightarrow L$ est déjà donné par $\alpha$. Donc notre fold est équivalent à un morphisme $L_A \rightarrow B$ grâce à l'initialité des listes d'éléments de $A$.
+Les listes d'éléments de $A$ forment une algèbre initiale (on peut le vérifier exactement de la même manière que dans la partie sur la récursion). Par conséquent, en composant notre fold et le morphisme de l'objet initial, notre fold est exactement la donnée  d'un morphisme $(FL_A \rightarrow L_A) \rightarrow L_A \rightarrow B $, or $FL_A \rightarrow L_A$ est déjà donné par $\alpha$. Donc notre fold est équivalent à un morphisme $L_A \rightarrow B$ grâce à l'initialité des listes d'éléments de $A$.
+
+
 
 \section{F-coalgèbres}
 
@@ -425,34 +426,10 @@ Une $F$-algèbre initiale induit une $F$-coalgèbre. En effet, soit $C$ une cat�
     \alpha' : A & \rightarrow FA 
 \end{align*}
 C'est à dire que $(A, \alpha')$ constitue une $F$-coalgèbre. En général, $\alpha'$ est d'ailleurs déjà explicité à ce stade : lorsqu'on montre que $A$ est support d'une $F$-algèbre initiale, on construit l'unique morphsme pour un objet quelconque, il suffit de remplacer cet objet par $A$.
-Ce résultat a une interprétation moins formelle : l'initialité dans une $F$-algèbre est parfois liée à quelque chose qui \textit{pourrait} ne pas s'arrêter. On a par exemple vu plus haut que la construction de la récursion se décrit via l'initialité d'une $F$-algèbre. Or cette récursion est quelque chose qui ne s'arrête potentiellement pas : on veut pouvoir construire tous les termes d'une suite, par exemple. 
-
+PAS RELU
 \subsubsection{Un exemple algébrique : les groupes quotient}
 
-Un groupe quotient reste un groupe, on peut donc exprimer cette transformation par un endofoncteur de $\mathbf{Grp}$ à condition que cette transformation soit \textit{fonctorielle}, c'est à dire qu'elle fasse commuter le diagramme suivant pour trois groupes $G_1,G_2,G_3$ et des morphismes $f$ et $g$ : 
-
-\begin{center}
-\begin{tikzcd}
-	{FG_1} &&&& {F G_3} \\
-	\\
-	&& {FG_2} \\
-	&& {G_2} \\
-	\\
-	{G_1} &&&& {G_3}
-	\arrow["f", from=6-1, to=4-3]
-	\arrow["F", from=6-1, to=1-1]
-	\arrow["{F f \circ g}", from=1-1, to=1-5]
-	\arrow["F", from=4-3, to=3-3]
-	\arrow["g"', from=4-3, to=6-5]
-	\arrow[no head, from=4-3, to=6-1]
-	\arrow["{f \circ g}", from=6-1, to=6-5]
-	\arrow["F"', from=6-5, to=1-5]
-	\arrow["{F f}"', from=1-1, to=3-3]
-	\arrow["Fg"', from=3-3, to=1-5]
-\end{tikzcd}
-\end{center}
-
-Bonne nouvelle : pour trois exemples, on a la fonctorialité. \\ 
+Un groupe quotient reste un groupe, on peut donc exprimer cette transformation par un endofoncteur de $\mathbf{Set}$ 
 Le premier exemple : le quotient de $G$ par $G$. Le foncteur $F$ associé envoie alors un groupe $G$ sur le groupe $G/G$ isomorphe au groupe trivial, et tout morphisme sur le morphisme trivial. \\ 
 Deuxième exemple : le quotient de $G$ par $\{1_G\}$. Le foncteur $F$ associé envoie alors $G$ sur $G/\{ 1_G\}$ isomorphe à $G$ (foncteur identité), et tout morphisme sur lui-même. \\ 
 Troisième exemple un peu moins simple : le quotient de $G$ par $D(G)$ le sous groupe dérivé de $G$. Le foncteur envoie un objet $G$ sur $G/D(G)$, et le morphisme sur le morphisme associé, "abélianisé". \\ 
@@ -483,8 +460,23 @@ La $F$-coalgèbre qui correspond à la destruction des entiers naturels (potenti
 
 En fait, cette coalgèbre est terminale pour ce foncteur : exactement comme pour le cas inductif, cette coalgèbre nous fournit toutes les constructions par coinduction, y compris des raisonnements coinductifs
 \\
+Un autre exemple est donné par les arbres binaires coinductifs dont les noeuds sont de type $A$. On considère 
+\begin{align*}
+    F : \mathbf{Set} & \rightarrow \mathbf{Set} \\      X & \mapsto A \times X \times X    
+\end{align*}
 
-Pour modéliser un flux de donnée continu (stream), on peut utiliser une $F$-coalgèbre. Pour $A$ un alphabet ,  on pose
+Alors, $F$ est un endofoncteur $\mathbf{Set}$. En posant $S$ l'ensemble des arbres coinductifs, le type des arbres coinductifs et ses constructeurs est décrit par la $F$-coalgèbre suivante ($S$,
+ $\alpha$) :
+
+ \begin{align*}
+    \alpha : S &\rightarrow F S \\ 
+             t &\rightarrow \text{(n, sag , sad)} 
+\end{align*}
+
+Où $n$ est la valeur portée par le noeud de $t$, $sag$ et $sad$ ses sous arbres droits et gauches. Définir un arbre coinductif peut permettre d'exprimer beaucoup de propriétés "rationnelles", c'est à dire des propriétés infinies mais dont l'infini se comporte de façon modélisée par un arbre.
+\\
+
+Pour modéliser un flux de donnée continu (stream), on peut utiliser une $F$-coalgèbre. Pour $A$ un alphabet,  on pose
 \begin{align*}
     F : \mathbf{Set} & \rightarrow \mathbf{Set} \\ 
         X & \mapsto 1 + A \times X
@@ -497,7 +489,7 @@ Alors, la $F$-coalgèbre des flux de données contenant des états stockés dans
              x & \mapsto inr(\langle x', t \rangle)
 \end{align*}
 
-Cette définition laisse penser qu'on pourrait construire des automates infinis via des $F$-coalgèbres. C'est une juste intuition, développée à travers une très large théorie pour laquelle \cite{Cet article} est une bonne introduction, à mon sens. 
+Cette définition laisse penser qu'on pourrait construire des automates infinis via des $F$-coalgèbres, et c'est vrai (cette construction est présentée dans le \cite{Jacobs}
 
 \\ 
 
@@ -510,9 +502,9 @@ On peut également modéliser un grand nombre de structures de données "infinie
 \bibitem{Mac Lane}
 Mac Lane \emph{Categories for the working Mathemathician}
 
-\bibitem{Cet article}
-Article de Brengos \emph{https://arxiv.org/pdf/1902.02601.pdf}
-
+\bibitem{Introduction to coalgebras}
+Jacobs
+\emph{https://www.cs.ru.nl/B.Jacobs/CLG/JacobsCoalgebraIntro.pdf}
 
 \end{thebibliography}
 

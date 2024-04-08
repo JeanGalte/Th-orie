@@ -100,7 +100,7 @@ Définir formellement ici la notion de produit et coproduit ne serait pas forcé
      n & \mapsto n+1 \\ 
      k & \mapsto k-1     
 \end{align*}
-Les donnée d'un élément de $\Z$ et d'un ensemble $X$ nous donnent la donnée d'un élément de $\Z + X$, donc si on veut avoir pour codomaine un comproduit, on peut "injecter" l'élément d'un ensemble $A$ dans le coproduit $A+B$. Concrètement,  un élément $a \in A$ s'injecte dans $A+B$ comme $(0,a)$. Pour réaliser cette injection, on peut utiliser $inr$. L'équivalent pour l'injection à gauche est $inl$. Si on veut définir $\alpha$ comme un endomorphisme de $\N + \Z$, on peut donc le réécrire en utilisant ces injections :
+Les donnée d'un élément de $\Z$ et d'un ensemble $X$ nous donnent la donnée d'un élément de $\Z + X$, donc si on veut avoir pour codomaine un coproduit, on peut "injecter" l'élément d'un ensemble $A$ dans le coproduit $A+B$. Concrètement,  un élément $a \in A$ s'injecte dans $A+B$ comme $(0,a)$. Pour réaliser cette injection, on peut utiliser $inr$. L'équivalent pour l'injection à gauche est $inl$. Si on veut définir $\alpha$ comme un endomorphisme de $\N + \Z$, on peut donc le réécrire en utilisant ces injections :
 \begin{align*}
      \alpha : \N + \Z & \rightarrow \N + \Z \\ 
      n & \mapsto inl(n+1) \\ 
@@ -426,10 +426,10 @@ Une $F$-algèbre initiale induit une $F$-coalgèbre. En effet, soit $C$ une cat�
     \alpha' : A & \rightarrow FA 
 \end{align*}
 C'est à dire que $(A, \alpha')$ constitue une $F$-coalgèbre. En général, $\alpha'$ est d'ailleurs déjà explicité à ce stade : lorsqu'on montre que $A$ est support d'une $F$-algèbre initiale, on construit l'unique morphsme pour un objet quelconque, il suffit de remplacer cet objet par $A$.
-PAS RELU
+
 \subsubsection{Un exemple algébrique : les groupes quotient}
 
-Un groupe quotient reste un groupe, on peut donc exprimer cette transformation par un endofoncteur de $\mathbf{Set}$ 
+Un groupe quotient reste un groupe, on peut donc exprimer cette transformation par un endofoncteur de $\mathbf{Set}$ sur les ensembles sous jacents des groupes et des groupes quotients. \\ 
 Le premier exemple : le quotient de $G$ par $G$. Le foncteur $F$ associé envoie alors un groupe $G$ sur le groupe $G/G$ isomorphe au groupe trivial, et tout morphisme sur le morphisme trivial. \\ 
 Deuxième exemple : le quotient de $G$ par $\{1_G\}$. Le foncteur $F$ associé envoie alors $G$ sur $G/\{ 1_G\}$ isomorphe à $G$ (foncteur identité), et tout morphisme sur lui-même. \\ 
 Troisième exemple un peu moins simple : le quotient de $G$ par $D(G)$ le sous groupe dérivé de $G$. Le foncteur envoie un objet $G$ sur $G/D(G)$, et le morphisme sur le morphisme associé, "abélianisé". \\ 
@@ -458,7 +458,7 @@ La $F$-coalgèbre qui correspond à la destruction des entiers naturels (potenti
             \infty & \mapsto \infty
 \end{align*}
 
-En fait, cette coalgèbre est terminale pour ce foncteur : exactement comme pour le cas inductif, cette coalgèbre nous fournit toutes les constructions par coinduction, y compris des raisonnements coinductifs
+En fait, cette coalgèbre est terminale pour ce foncteur : exactement comme pour le cas inductif, cette coalgèbre nous fournit toutes les constructions par coinduction, y compris des raisonnements coinductifs.
 \\
 Un autre exemple est donné par les arbres binaires coinductifs dont les noeuds sont de type $A$. On considère 
 \begin{align*}
@@ -489,7 +489,7 @@ Alors, la $F$-coalgèbre des flux de données contenant des états stockés dans
              x & \mapsto inr(\langle x', t \rangle)
 \end{align*}
 
-Cette définition laisse penser qu'on pourrait construire des automates infinis via des $F$-coalgèbres, et c'est vrai (cette construction est présentée dans le \cite{Jacobs}
+Cette définition laisse penser qu'on pourrait construire des automates infinis via des $F$-coalgèbres, et c'est vrai (cette construction est présentée dans le \cite{Jacobs} )
 
 \\ 
 
